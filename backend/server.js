@@ -1,10 +1,8 @@
 const express = require('express');
-const nodesRoutes = require('./routes/nodesRoutes.js'); // Importing the nodes routes
+const nodesRoutes = require('./routes/nodesRoutes'); // Importing the nodes routes
+
 const app = express();
 const port = 3000;
-
-
-// Middleware to parse JSON bodiesapp.use(express.json());
 
 app.get('/', (req, res) => {
     res.send('Hello World! I am a backend!');
