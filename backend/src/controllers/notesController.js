@@ -26,8 +26,29 @@ const getAllNotes = async (req, res) => {
     }
 }
 
-const storeNote = (req, res) => {
-    res.status(201).json({ message: 'Node created successfully' });
+const storeNote = async (req, res) => {
+    try {
+        const { title, content } = req.body;
+
+        const note = await Note.create({
+            title,
+            content
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'New note created successfully',
+            note
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: `Error In Create Note API: ${error.message}`,
+            error
+        });
+
+    }
 }
 
 const updateNote = (req, res) => {
