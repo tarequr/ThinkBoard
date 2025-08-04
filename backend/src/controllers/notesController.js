@@ -1,5 +1,29 @@
-const getAllNotes = (req, res) => {
-    res.send('You just fetched the nodes. This is a placeholder response.');
+const Note = require('../models/Note');
+
+const getAllNotes = async (req, res) => {
+    try {
+        const notes = await Note.find({});
+
+        if (!notes) {
+            return res.status(404).send({
+                success: false,
+                message: 'No note available'
+            });
+        }
+
+        res.status(200).send({
+            success: true,
+            totalCount: notes.length,
+            notes
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: `Error In Get All Notes API: ${error.message}`,
+            error
+        });
+    }
 }
 
 const storeNote = (req, res) => {

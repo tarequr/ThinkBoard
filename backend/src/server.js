@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
     res.send('Hello World! I am a backend!');
 });
 
+app.use(express.json()); // Middleware to parse JSON bodies
 app.use('/api/notes', nodesRoutes);
 
 app.listen(port, () => {
