@@ -14,7 +14,9 @@ app.get('/', (req, res) => {
     res.send('Hello World! I am a backend!');
 });
 
-app.use(express.json()); // Middleware to parse JSON bodies
+app.use(express.json()); // Middleware to parse JSON bodies and for application/json
+app.use(express.urlencoded({ extended: true })); // for form-data and x-www-form-urlencoded
+
 app.use('/api/notes', nodesRoutes);
 
 app.listen(port, () => {
