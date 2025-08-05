@@ -51,14 +51,60 @@ const storeNote = async (req, res) => {
     }
 }
 
-const updateNote = (req, res) => {
-    const { id } = req.params;
-    res.status(200).json({ message: `Node with ID ${id} updated successfully` });
+const updateNote = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, content } = req.body;
+
+        const note = await Note.findByIdAndUpdate(id, { title, content }, { new: true });
+
+        if (!note) {
+            return res.status(500).send({
+                success: false,
+                message: 'No note available'
+            });
+        }
+
+        res.status(200).send({
+            success: true,
+            message: 'Note updated successfully',
+            note
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: `Error In Update Note API: ${error.message}`,
+            error
+        });
+    }
 }
 
-const deleteNote = (req, res) => {
-    const { id } = req.params;
-    res.status(200).json({ message: `Node with ID ${id} deleted successfully` });
+const deleteNote = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            return res.status(404).send({
+                success: false,
+                message: 'Please provide note id.'
+            });
+        }
+
+        await Note.findByIdAndDelete(req.params.id);
+
+        res.status(200).send({
+            success: true,
+            message: 'Note deleted successfully'
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: `Error In Delete Note API: ${error.message}`,
+            error
+        });
+    }
 }
 
 module.exports = {
