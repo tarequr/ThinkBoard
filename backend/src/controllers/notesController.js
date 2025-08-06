@@ -81,6 +81,37 @@ const updateNote = async (req, res) => {
     }
 }
 
+const getAllNoteById = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            return res.status(404).send({
+                success: false,
+                message: 'Please provide food id.'
+            });
+        }
+
+        const note = await Note.findById(req.params.id);
+        if (!note) {
+            return res.status(404).send({
+                success: false,
+                message: 'No note available'
+            });
+        }
+
+        res.status(200).send({
+            success: true,
+            note
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: `Error In Get Single Note API: ${error.message}`,
+            error
+        });
+    }
+}
+
 const deleteNote = async (req, res) => {
     try {
         if (!req.params.id) {
@@ -111,5 +142,6 @@ module.exports = {
     getAllNotes,
     storeNote,
     updateNote,
+    getAllNoteById,
     deleteNote
 };
