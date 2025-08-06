@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-connectDB();
+// connectDB();
 
 app.get('/', (req, res) => {
     res.send('Hello World! I am a backend!');
@@ -21,6 +21,9 @@ app.use(rateLimiter); // Apply rate limiting middleware
 
 app.use('/api/notes', nodesRoutes);
 
-app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}`);
+connectDB().then(() => {
+    app.listen(port, () => {
+        console.log(`Example app listening on port http://localhost:${port}`);
+    });
 });
+
