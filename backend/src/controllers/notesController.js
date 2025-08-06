@@ -2,7 +2,7 @@ const Note = require('../models/Note');
 
 const getAllNotes = async (req, res) => {
     try {
-        const notes = await Note.find({});
+        const notes = await Note.find().sort({ createdAt: -1 });
 
         if (!notes) {
             return res.status(404).send({
