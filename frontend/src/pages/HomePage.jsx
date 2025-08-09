@@ -1,12 +1,10 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
 
 function HomePage() {
     return (
-        <div>
-            <h1>Welcome to the Home Page</h1>
-            <h1 className="text-3xl font-bold underline">
-                Hello world!
-            </h1>
+        <div className='min-h-screen'>
+            <Navbar />
         </div>
     )
 }
