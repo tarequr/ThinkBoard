@@ -52,6 +52,35 @@ function NoteDetailPage() {
         }
     };
 
+    const handleSave = async () => {
+        if (!note || !note.title.trim() || !note.content.trim()) {
+            toast.error('All fields are required');
+            return;
+        }
+
+        setSaving(true);
+
+        try {
+            await api.put(`/notes/${id}`, {
+                title: note.title,
+                content: note.content
+            });
+
+            toast.success('Note updated successfully');
+            navigate('/'); // Redirect to the note detail page after saving
+        } catch (error) {
+            console.error('Error updating note:', error);
+
+            if (error.response && error.response.status === 429) {
+                toast.error('Slow down! You are updating note too quickly.', { duration: 4000, icon: '⚠️' });
+            } else {
+                toast.error('Failed to update note');
+            }
+        } finally {
+            setSaving(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-base-200 flex items-center justify-center">
@@ -86,6 +115,7 @@ function NoteDetailPage() {
                                     placeholder="Note title"
                                     className="input input-bordered"
                                     value={note.title}
+                                    onChange={(e) => setNote({ ...note, title: e.target.value })}
                                 />
                             </div>
 
@@ -97,11 +127,12 @@ function NoteDetailPage() {
                                     placeholder="Write your note here..."
                                     className="textarea textarea-bordered h-32"
                                     value={note.content}
+                                    onChange={(e) => setNote({ ...note, content: e.target.value })}
                                 />
                             </div>
 
                             <div className="card-actions justify-end">
-                                <button className="btn btn-primary" disabled={saving}>
+                                <button className="btn btn-primary" disabled={saving} onClick={handleSave}>
                                     {saving ? "Saving..." : "Save Changes"}
                                 </button>
                             </div>
