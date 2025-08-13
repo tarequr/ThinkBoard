@@ -36,7 +36,21 @@ function NoteDetailPage() {
         fetchNote();
     }, [id]);
 
-    console.log("Note fetched:", note);
+    // console.log("Note fetched:", note);
+
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this note?")) {
+            return;
+        }
+        try {
+            await api.delete(`/notes/${id}`); // Use the correct endpoint for deleting a note
+            toast.success('Note deleted successfully');
+            navigate('/'); // Redirect to the home page after successful deletion
+        } catch (error) {
+            console.error('Error deleting note:', error);
+            toast.error('Failed to delete note');
+        }
+    };
 
     if (loading) {
         return (
@@ -55,7 +69,7 @@ function NoteDetailPage() {
                             <ArrowLeftIcon className="h-5 w-5" />
                             Back to Notes
                         </Link>
-                        <button className="btn btn-error btn-outline">
+                        <button className="btn btn-error btn-outline" onClick={handleDelete}>
                             <Trash2Icon className="h-5 w-5" />
                             Delete Note
                         </button>
